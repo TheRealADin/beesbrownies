@@ -244,21 +244,9 @@
         openBtn.target = '_blank';
         openBtn.rel = 'noreferrer';
 
-        const delBtn = document.createElement('button');
-        delBtn.className = 'delete';
-        delBtn.textContent = 'Delete';
-        delBtn.onclick = () => {
-          if(!confirm('Remove this game?')) return;
-          const list = loadGames();
-          list.splice(idx,1);
-          saveGames(list);
-          renderGames();
-          hidePlayerIfRemoved(g);
-        };
 
         actions.appendChild(playBtn);
         actions.appendChild(openBtn);
-        actions.appendChild(delBtn);
 
         meta.appendChild(actions);
         card.appendChild(meta);
