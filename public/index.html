@@ -1,13 +1,167 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bee's Brownies Has Been Shut Down</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Evan’s Hub</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --card: #14121a;
+      --muted: #a59fbf;
+      --accent: #a855f7;
+      --accent-2: #7e22ce;
+      --glass: rgba(255,255,255,0.04);
+    }
+    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;}
+    body{background:var(--bg);color:#f0eaff;padding:28px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+    .container{max-width:1150px;margin:0 auto}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;gap:16px}
+    h1{font-size:24px;margin:0;color:#fff}
+    nav{display:flex;gap:10px}
+    .tab-btn{
+      padding:10px 16px;border-radius:12px;background:transparent;border:0;
+      color:var(--muted);cursor:pointer;font-weight:600;transition:all .15s;
+    }
+    .tab-btn.active{background:linear-gradient(180deg, rgba(168,85,247,0.22), rgba(126,34,206,0.18));color:#fff;box-shadow:0 6px 18px rgba(126,34,206,0.2)}
+    main{display:block}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:18px;box-shadow:0 6px 22px rgba(0,0,0,0.65)}
+    /* HOME */
+    #home .home-heading{font-size:20px;margin:0 0 8px 0;color:#fff}
+    #home p{color:var(--muted);margin:0 0 8px 0}
+    .editable{padding:12px;border-radius:10px;background:var(--glass);border:1px dashed rgba(255,255,255,0.1);min-height:80px;color:#e9d5ff;overflow:auto}
+    /* LISTS (Games + Apps) */
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;margin-top:14px}
+    .item-card img{width:100%;height:150px;object-fit:cover;border-radius:8px;background:#222}
+    .item-card .meta{display:flex;justify-content:space-between;align-items:start;gap:12px;margin-top:10px}
+    .item-title{font-weight:700;color:#fff;margin:0}
+    .item-desc{color:var(--muted);font-size:13px;margin-top:6px}
+    .btn{padding:8px 12px;border-radius:10px;border:0;cursor:pointer;font-weight:600}
+    .btn.play{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff}
+    .btn.open{background:rgba(255,255,255,0.06);color:var(--muted)}
+    .small{font-size:13px;padding:6px 10px}
+    .form-row{display:flex;gap:8px;margin-top:12px}
+    .form-row input{flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.08);background:transparent;color:#f0eaff}
+    .form-row button{padding:8px 12px;border-radius:8px;background:var(--accent);color:#fff;border:0;cursor:pointer}
+    .player{margin-top:20px;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.08)}
+    .player iframe{width:100%;height:560px;border:0}
+    footer{margin-top:28px;color:var(--muted);font-size:13px;text-align:center}
+    @media(max-width:640px){.player iframe{height:420px}}
+    .muted{color:var(--muted)}
+  </style>
 </head>
 <body>
-    <h1>Bee's Brownies has been publicly shut down</h1>
-    <h3>Please Find a new website!</h3>
-    <h6>Error Code 404</h6>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Evan’s Hub</h1>
+        <div class="muted" style="font-size:13px;margin-top:6px">Dark mode browser hub for <b>Games</b> and <b>Apps</b>.</div>
+      </div>
+      <nav>
+        <button class="tab-btn active" id="tab-home">Home</button>
+        <button class="tab-btn" id="tab-games">Games</button>
+        <button class="tab-btn" id="tab-apps">Apps</button>
+      </nav>
+    </header>
+
+    <main>
+      <!-- HOME -->
+      <section id="home" class="card" style="display:block">
+        <div class="home-heading">Welcome</div>
+        <p class="muted">Click into the editable area below to update your text. Saved locally in this browser.</p>
+        <div id="homeEditable" class="editable" contenteditable="true">Welcome to Evan’s Hub!</div>
+      </section>
+
+      <!-- GAMES -->
+      <section id="games" class="card" style="display:none;margin-top:18px">
+        <h2 style="margin:0;font-size:18px;color:#fff">Games</h2>
+        <div class="form-row">
+          <input type="text" id="gName" placeholder="Game title" />
+          <input type="url" id="gURL" placeholder="Game URL" />
+        </div>
+        <div class="form-row">
+          <input type="text" id="gImg" placeholder="Image URL" />
+          <input type="text" id="gDesc" placeholder="Description" />
+          <button id="addGameBtn">Add</button>
+        </div>
+        <div id="gamesGrid" class="grid"></div>
+        <div id="gamePlayer" class="player" style="display:none"><iframe></iframe></div>
+      </section>
+
+      <!-- APPS -->
+      <section id="apps" class="card" style="display:none;margin-top:18px">
+        <h2 style="margin:0;font-size:18px;color:#fff">Apps</h2>
+        <div class="form-row">
+          <input type="text" id="aName" placeholder="App name" />
+          <input type="url" id="aURL" placeholder="App URL" />
+        </div>
+        <div class="form-row">
+          <input type="text" id="aImg" placeholder="Image URL" />
+          <input type="text" id="aDesc" placeholder="Description" />
+          <button id="addAppBtn">Add</button>
+        </div>
+        <div id="appsGrid" class="grid"></div>
+        <div id="appPlayer" class="player" style="display:none"><iframe></iframe></div>
+      </section>
+
+      <footer>© Evan’s Hub · Purple & Black theme</footer>
+    </main>
+  </div>
+
+  <script>
+    // Storage keys
+    const GAMES_KEY = 'hub_games_v2';
+    const APPS_KEY = 'hub_apps_v2';
+
+    // Tabs
+    const tabHome=document.getElementById('tab-home');
+    const tabGames=document.getElementById('tab-games');
+    const tabApps=document.getElementById('tab-apps');
+    const sectHome=document.getElementById('home');
+    const sectGames=document.getElementById('games');
+    const sectApps=document.getElementById('apps');
+
+    tabHome.onclick=()=>{tabHome.classList.add('active');tabGames.classList.remove('active');tabApps.classList.remove('active');sectHome.style.display='block';sectGames.style.display='none';sectApps.style.display='none'};
+    tabGames.onclick=()=>{tabGames.classList.add('active');tabHome.classList.remove('active');tabApps.classList.remove('active');sectGames.style.display='block';sectHome.style.display='none';sectApps.style.display='none';renderList(GAMES_KEY,'gamesGrid','gamePlayer')};
+    tabApps.onclick=()=>{tabApps.classList.add('active');tabHome.classList.remove('active');tabGames.classList.remove('active');sectApps.style.display='block';sectHome.style.display='none';sectGames.style.display='none';renderList(APPS_KEY,'appsGrid','appPlayer')};
+
+    // Add Game
+    document.getElementById('addGameBtn').onclick=()=>{
+      const name=gName.value.trim(),url=gURL.value.trim(),image=gImg.value.trim(),desc=gDesc.value.trim();
+      if(!name||!url) return alert('Fill in name + URL');
+      const list=loadList(GAMES_KEY);list.push({name,url,image,desc});saveList(GAMES_KEY,list);renderList(GAMES_KEY,'gamesGrid','gamePlayer');
+      gName.value=gURL.value=gImg.value=gDesc.value='';
+    };
+    // Add App
+    document.getElementById('addAppBtn').onclick=()=>{
+      const name=aName.value.trim(),url=aURL.value.trim(),image=aImg.value.trim(),desc=aDesc.value.trim();
+      if(!name||!url) return alert('Fill in name + URL');
+      const list=loadList(APPS_KEY);list.push({name,url,image,desc});saveList(APPS_KEY,list);renderList(APPS_KEY,'appsGrid','appPlayer');
+      aName.value=aURL.value=aImg.value=aDesc.value='';
+    };
+
+    // Helpers
+    function loadList(key){try{return JSON.parse(localStorage.getItem(key))||[]}catch{return[]}}
+    function saveList(key,list){localStorage.setItem(key,JSON.stringify(list))}
+    function renderList(key,gridId,playerId){
+      const grid=document.getElementById(gridId);
+      const player=document.getElementById(playerId);
+      const frame=player.querySelector('iframe');
+      const list=loadList(key);
+      grid.innerHTML='';
+      if(!list.length){grid.innerHTML='<div class="muted">No items yet.</div>';return}
+      list.forEach(item=>{
+        const card=document.createElement('div');card.className='item-card card';
+        const img=document.createElement('img');img.src=item.image||'https://via.placeholder.com/800x500?text=Preview';card.appendChild(img);
+        const meta=document.createElement('div');meta.className='meta';
+        const text=document.createElement('div');const title=document.createElement('div');title.className='item-title';title.textContent=item.name;
+        const desc=document.createElement('div');desc.className='item-desc';desc.textContent=item.desc||'';text.appendChild(title);text.appendChild(desc);
+        const actions=document.createElement('div');const playBtn=document.createElement('button');playBtn.className='btn play small';playBtn.textContent='Open Here';playBtn.onclick=()=>{frame.src=item.url;player.style.display='block';player.scrollIntoView({behavior:'smooth'})};
+        const openBtn=document.createElement('a');openBtn.className='btn open small';openBtn.textContent='New Tab';openBtn.href=item.url;openBtn.target='_blank';
+        actions.appendChild(playBtn);actions.appendChild(openBtn);
+        meta.appendChild(text);meta.appendChild(actions);card.appendChild(meta);grid.appendChild(card);
+      })
+    }
+  </script>
 </body>
 </html>
