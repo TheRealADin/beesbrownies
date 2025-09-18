@@ -3,59 +3,86 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Evan’s Hub</title>
+  <title>Bee's Brownies / Evan's Hub</title>
+
   <style>
-    :root {
-      --bg: #0a0a0f;
-      --card: #14121a;
-      --muted: #a59fbf;
-      --accent: #a855f7;
-      --accent-2: #7e22ce;
-      --glass: rgba(255,255,255,0.04);
+    :root{
+      --bg:#07060a;
+      --panel:#0f0d15;
+      --muted:#a99fd6;
+      --accent1:#b578ff;
+      --accent2:#7c3aed;
+      --glass: rgba(255,255,255,0.03);
     }
-    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;}
-    body{background:var(--bg);color:#f0eaff;padding:28px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial}
+    body{background:linear-gradient(180deg,#05040a 0%, #0a0710 100%);color:#efe8ff;padding:28px;-webkit-font-smoothing:antialiased}
     .container{max-width:1150px;margin:0 auto}
-    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;gap:16px}
-    h1{font-size:24px;margin:0;color:#fff}
+    header{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:22px}
+    header h1{font-size:22px;margin:0;color:#fff}
+    header h6{margin:0;color:var(--muted);font-weight:600}
     nav{display:flex;gap:10px}
     .tab-btn{
-      padding:10px 16px;border-radius:12px;background:transparent;border:0;
-      color:var(--muted);cursor:pointer;font-weight:600;transition:all .15s;
+      padding:10px 14px;border-radius:12px;background:transparent;border:0;color:var(--muted);cursor:pointer;font-weight:700;letter-spacing:.2px;
+      transition:all .15s;
     }
-    .tab-btn.active{background:linear-gradient(180deg, rgba(168,85,247,0.22), rgba(126,34,206,0.18));color:#fff;box-shadow:0 6px 18px rgba(126,34,206,0.2)}
-    main{display:block}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:18px;box-shadow:0 6px 22px rgba(0,0,0,0.65)}
+    .tab-btn.active{
+      color:#fff;
+      background:linear-gradient(180deg, rgba(181,125,255,0.14), rgba(124,58,237,0.10));
+      box-shadow:0 10px 30px rgba(124,58,237,0.12)
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid rgba(255,255,255,0.03);
+      border-radius:14px;padding:18px;box-shadow:0 8px 30px rgba(0,0,0,0.6);
+    }
+
     /* HOME */
     #home .home-heading{font-size:20px;margin:0 0 8px 0;color:#fff}
     #home p{color:var(--muted);margin:0 0 8px 0}
-    .editable{padding:12px;border-radius:10px;background:var(--glass);border:1px dashed rgba(255,255,255,0.1);min-height:80px;color:#e9d5ff;overflow:auto}
-    /* LISTS (Games + Apps) */
+    .editable{
+      padding:12px;border-radius:10px;background:var(--glass);border:1px dashed rgba(255,255,255,0.03);min-height:80px;color:#e6dbff;overflow:auto;
+    }
+    .actions{display:flex;gap:8px;margin-top:12px}
+
+    /* LISTS */
     .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;margin-top:14px}
-    .item-card img{width:100%;height:150px;object-fit:cover;border-radius:8px;background:#222}
-    .item-card .meta{display:flex;justify-content:space-between;align-items:start;gap:12px;margin-top:10px}
-    .item-title{font-weight:700;color:#fff;margin:0}
+    .item-card{background:transparent;border-radius:12px;overflow:hidden}
+    .item-card .card-img{width:100%;height:150px;object-fit:cover;border-radius:8px;background:#111}
+    .item-meta{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-top:10px}
+    .item-title{font-weight:800;color:#fff;margin:0;font-size:16px}
     .item-desc{color:var(--muted);font-size:13px;margin-top:6px}
-    .btn{padding:8px 12px;border-radius:10px;border:0;cursor:pointer;font-weight:600}
-    .btn.play{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff}
-    .btn.open{background:rgba(255,255,255,0.06);color:var(--muted)}
+    .card-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+    .btn{padding:8px 12px;border-radius:10px;border:0;cursor:pointer;font-weight:700}
+    .btn.play{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#fff}
+    .btn.open{background:rgba(255,255,255,0.03);color:var(--muted)}
     .small{font-size:13px;padding:6px 10px}
+    .delete{background:transparent;color:#ff7a7a;border:0;padding:6px 8px;border-radius:8px;cursor:pointer}
+
+    /* forms */
     .form-row{display:flex;gap:8px;margin-top:12px}
-    .form-row input{flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.08);background:transparent;color:#f0eaff}
-    .form-row button{padding:8px 12px;border-radius:8px;background:var(--accent);color:#fff;border:0;cursor:pointer}
-    .player{margin-top:20px;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.08)}
-    .player iframe{width:100%;height:560px;border:0}
+    .form-row input{flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.05);background:transparent;color:#efe8ff}
+    .form-row button{padding:8px 12px;border-radius:8px;background:var(--accent1);color:#fff;border:0;cursor:pointer;font-weight:700}
+
+    /* player */
+    .player{margin-top:18px;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.03)}
+    .player .player-header{display:flex;justify-content:space-between;align-items:center;padding:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))}
+    .player iframe{width:100%;height:520px;border:0}
+
     footer{margin-top:28px;color:var(--muted);font-size:13px;text-align:center}
-    @media(max-width:640px){.player iframe{height:420px}}
-    .muted{color:var(--muted)}
+
+    @media (max-width:640px){
+      .player iframe{height:420px}
+      .form-row{flex-direction:column}
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
       <div>
-        <h1>Evan’s Hub</h1>
-        <div class="muted" style="font-size:13px;margin-top:6px">Dark mode browser hub for <b>Games</b> and <b>Apps</b>.</div>
+        <h1>Bee's Brownies Right? ;D</h1>
+        <h6 style="margin-top:6px;color:var(--muted)">hi cole — A compact hub by <strong>Evan Krosel</strong></h6>
       </div>
       <nav>
         <button class="tab-btn active" id="tab-home">Home</button>
@@ -68,100 +95,371 @@
       <!-- HOME -->
       <section id="home" class="card" style="display:block">
         <div class="home-heading">Welcome</div>
-        <p class="muted">Click into the editable area below to update your text. Saved locally in this browser.</p>
-        <div id="homeEditable" class="editable" contenteditable="true">Welcome to Evan’s Hub!</div>
+        <p class="muted">Click into the editable area below to update the text. Changes are saved locally in your browser.</p>
+        <div id="homeEditable" class="editable" contenteditable="true">Welcome to your personal Browser Game Hub — edit this message!</div>
+        <div class="actions">
+          <button id="saveHomeBtn" class="btn open small" style="background:var(--accent1);color:#fff">Save Home</button>
+          <button id="resetHomeBtn" class="btn open small" style="background:transparent;border:1px solid rgba(255,255,255,0.04)">Reset</button>
+        </div>
       </section>
 
       <!-- GAMES -->
       <section id="games" class="card" style="display:none;margin-top:18px">
-        <h2 style="margin:0;font-size:18px;color:#fff">Games</h2>
-        <div class="form-row">
-          <input type="text" id="gName" placeholder="Game title" />
-          <input type="url" id="gURL" placeholder="Game URL" />
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+          <div>
+            <h2 style="margin:0;font-size:18px;color:#fff">Games</h2>
+            <div class="muted" style="font-size:13px;margin-top:6px">Add a game by providing a public URL (must allow being embedded to play inline).</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <button id="importGames" class="btn small" style="background:transparent;border:1px solid rgba(255,255,255,0.04)">Load Defaults</button>
+            <button id="clearGames" class="btn small" style="background:transparent;border:1px solid rgba(255,255,255,0.04);color:#ffb3b3">Clear All</button>
+          </div>
+        </div>
+
+        <div class="form-row" style="margin-top:12px">
+          <input type="text" id="gName" placeholder="Game title (e.g. Eaglercraft)" />
+          <input type="url" id="gURL" placeholder="Game URL (https://... or /path)" />
         </div>
         <div class="form-row">
-          <input type="text" id="gImg" placeholder="Image URL" />
-          <input type="text" id="gDesc" placeholder="Description" />
-          <button id="addGameBtn">Add</button>
+          <input type="text" id="gImg" placeholder="Image URL (preview) — optional" />
+          <input type="text" id="gDesc" placeholder="Short description" />
+          <button id="addGameBtn">Add Game</button>
         </div>
+
         <div id="gamesGrid" class="grid"></div>
-        <div id="gamePlayer" class="player" style="display:none"><iframe></iframe></div>
+
+        <div id="playerWrap" class="player" style="display:none;margin-top:18px">
+          <div class="player-header">
+            <div id="nowPlayingTitle" style="font-weight:800;color:#fff"></div>
+            <div>
+              <a id="openNewTabBtn" href="#" target="_blank" class="btn open small">Open in New Tab</a>
+              <button id="closePlayer" class="btn small" style="background:transparent;border:1px solid rgba(255,255,255,0.04)">Close</button>
+            </div>
+          </div>
+          <iframe id="playerFrame" src=""></iframe>
+        </div>
       </section>
 
       <!-- APPS -->
       <section id="apps" class="card" style="display:none;margin-top:18px">
-        <h2 style="margin:0;font-size:18px;color:#fff">Apps</h2>
-        <div class="form-row">
-          <input type="text" id="aName" placeholder="App name" />
-          <input type="url" id="aURL" placeholder="App URL" />
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+          <div>
+            <h2 style="margin:0;font-size:18px;color:#fff">Apps</h2>
+            <div class="muted" style="font-size:13px;margin-top:6px">Add web apps the same way you add games — they’ll live separately here.</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <button id="importApps" class="btn small" style="background:transparent;border:1px solid rgba(255,255,255,0.04)">Load Defaults</button>
+            <button id="clearApps" class="btn small" style="background:transparent;border:1px solid rgba(255,255,255,0.04);color:#ffb3b3">Clear All</button>
+          </div>
+        </div>
+
+        <div class="form-row" style="margin-top:12px">
+          <input type="text" id="aName" placeholder="App title (e.g. Helios Browser)" />
+          <input type="url" id="aURL" placeholder="App URL (https://... or /path)" />
         </div>
         <div class="form-row">
-          <input type="text" id="aImg" placeholder="Image URL" />
-          <input type="text" id="aDesc" placeholder="Description" />
-          <button id="addAppBtn">Add</button>
+          <input type="text" id="aImg" placeholder="Image URL (preview) — optional" />
+          <input type="text" id="aDesc" placeholder="Short description" />
+          <button id="addAppBtn">Add App</button>
         </div>
+
         <div id="appsGrid" class="grid"></div>
-        <div id="appPlayer" class="player" style="display:none"><iframe></iframe></div>
+
+        <div id="appPlayerWrap" class="player" style="display:none;margin-top:18px">
+          <div class="player-header">
+            <div id="nowAppTitle" style="font-weight:800;color:#fff"></div>
+            <div>
+              <a id="openAppNewTabBtn" href="#" target="_blank" class="btn open small">Open in New Tab</a>
+              <button id="closeAppPlayer" class="btn small" style="background:transparent;border:1px solid rgba(255,255,255,0.04)">Close</button>
+            </div>
+          </div>
+          <iframe id="appPlayerFrame" src=""></iframe>
+        </div>
       </section>
 
-      <footer>© Evan’s Hub · Purple & Black theme</footer>
+      <footer>Made for you · Edit games & apps freely · Saved locally in this browser</footer>
     </main>
   </div>
 
   <script>
-    // Storage keys
-    const GAMES_KEY = 'hub_games_v2';
-    const APPS_KEY = 'hub_apps_v2';
+    // Keys
+    const GAMES_KEY = 'hub_games_v1';
+    const APPS_KEY = 'hub_apps_v1';
+    const HOME_KEY = 'hub_home_v1';
 
-    // Tabs
-    const tabHome=document.getElementById('tab-home');
-    const tabGames=document.getElementById('tab-games');
-    const tabApps=document.getElementById('tab-apps');
-    const sectHome=document.getElementById('home');
-    const sectGames=document.getElementById('games');
-    const sectApps=document.getElementById('apps');
+    // DEFAULTS (your provided long list)
+    const defaultGames = [
+      { name: 'Minecraft', url: '/minecraft', description: 'Play Minecraft In Browser!', image: 'https://logo.com/image-cdn/images/kts928pd/production/e1d61cc6d5f05c33c1cd0fbf96c51554671750ba-1140x620.png?w=1920&q=72&fm=webp' },
+      { name: 'Classic Minecraft', url: 'https://classic.minecraft.net', description: 'OG Minecraft, In the browser', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSD-KVB2IUG0vYz4i1HVnbC0hSWrT6aBOrIQ&s' },
+      { name: 'Idle Breakdown', url: '/idle-breakout/index.html', description: 'The OG Idle Breakout Game', image: 'https://www.coolmathgames.com/sites/default/files/IdleBreakout_OG-logo.jpg' },
+      { name: 'Geo Gesser', url: '/geogess.html', description: 'Guess Where you are in the world', image: 'https://i.ytimg.com/vi/SA6Y52Us4sk/maxresdefault.jpg' },
+      { name: 'Retro Bowl', url: '/retro-bowl', description: 'futballl', image: 'https://assets.nintendo.com/image/upload/ar_16:9,c_lpad,w_1240/b_white/f_auto/q_auto/ncom/software/switch/70010000048336/e3c1297d2ec30fe72a657af60c416d10c68a784bc874cf28e19cdf9261956919' },
+      { name: 'Infinite Craft', url: '/infinitecraft', description: 'craft, infinite', image: 'https://images.ctfassets.net/w5r1fvmogo3f/CQ8sgRgL0y2LWrTE2Pzef/819e83ca5715c9c4a0c371a92c528a6c/BlogPost_How_to_Make_Life_in_Infinite_Craft_header_img_1.jpg' },
+      { name: 'Hole.io', url: '/holeio', description: 'big hol', image: 'https://assets.nintendo.com/image/upload/c_fill,w_1200/q_auto:best/f_auto/dpr_2.0/ncom/software/switch/70010000069917/28c5a57b2711d70dbeb4dd55155691e8135a3069bad3455547392878c0162861' },
+      { name: 'FNAF 2', url: '/fnaf-2', description: 'ahh scery', image: 'https://freddy-fazbears-pizza.fandom.com/wiki/Show_Stage_%28FNaF2%29?file=FNaF2Stage.png' },
+      { name: 'Tiny Fishing', url: '/tinyfishing', description: 'why r yall addicted to this', image: 'https://www.coolmathgames.com/sites/default/files/TinyFishing_OG-logo.jpg' },
+      { name: 'Subway Surfers', url: '/subway-surfers', description: 'youtube shorts ahh addicting', image: 'https://egw.news/_next/image?url=https%3A%2F%2Fegw.news%2Fuploads%2Fnews%2F1%2F17%2F1746781166834_1746781166835.webp&w=1920&q=75' },
+      { name: 'Helios Browser', url: 'https://helios-browser.vercel.app', description: 'cool', image: '' },
+      { name: 'Block Blast', url: '/blockblast', description: '+5 iq', image: 'https://imgs.crazygames.com/block-puzzle-master_1x1/20240308034606/block-puzzle-master_1x1-cover?format=auto&quality=100&metadata=none&width=1200' },
+      { name: 'Bitlife', url: '/bitlife', description: 'supa fun', image: 'https://play-lh.googleusercontent.com/fUM-UyywXxjC8soxAZdIlxJrlRRXmql8wkE426SHzft4lJycSKVd2jCYQQX1BEG9Xw' },
+      { name: 'Mac VG', url: 'https://mac-web.github.io/macvg', description: 'supa fun', image: 'https://images.ctfassets.net/vfkpgemp7ek3/1551059360/4ab92cf830c4d6141b7bb2756d5f1c9c/top-games-worldwide-q2-2019-banner.jpg' },
+      { name: 'Brownie Browser ;D', url: 'https://brownies-browser.vercel.app', description: 'supa fun', image: 'https://marketing.create-cdn.net/assets/browserlogos2021.png' }
+    ];
 
-    tabHome.onclick=()=>{tabHome.classList.add('active');tabGames.classList.remove('active');tabApps.classList.remove('active');sectHome.style.display='block';sectGames.style.display='none';sectApps.style.display='none'};
-    tabGames.onclick=()=>{tabGames.classList.add('active');tabHome.classList.remove('active');tabApps.classList.remove('active');sectGames.style.display='block';sectHome.style.display='none';sectApps.style.display='none';renderList(GAMES_KEY,'gamesGrid','gamePlayer')};
-    tabApps.onclick=()=>{tabApps.classList.add('active');tabHome.classList.remove('active');tabGames.classList.remove('active');sectApps.style.display='block';sectHome.style.display='none';sectGames.style.display='none';renderList(APPS_KEY,'appsGrid','appPlayer')};
+    // small default apps set (you can expand)
+    const defaultApps = [
+      { name: 'Helios Browser', url: 'https://helios-browser.vercel.app', description: 'A browser front-end', image: 'https://via.placeholder.com/1200x700?text=Helios' },
+      { name: 'Brownie Browser', url: 'https://brownies-browser.vercel.app', description: 'Brownies browser project', image: 'https://via.placeholder.com/1200x700?text=Brownies' }
+    ];
 
-    // Add Game
-    document.getElementById('addGameBtn').onclick=()=>{
-      const name=gName.value.trim(),url=gURL.value.trim(),image=gImg.value.trim(),desc=gDesc.value.trim();
-      if(!name||!url) return alert('Fill in name + URL');
-      const list=loadList(GAMES_KEY);list.push({name,url,image,desc});saveList(GAMES_KEY,list);renderList(GAMES_KEY,'gamesGrid','gamePlayer');
-      gName.value=gURL.value=gImg.value=gDesc.value='';
-    };
-    // Add App
-    document.getElementById('addAppBtn').onclick=()=>{
-      const name=aName.value.trim(),url=aURL.value.trim(),image=aImg.value.trim(),desc=aDesc.value.trim();
-      if(!name||!url) return alert('Fill in name + URL');
-      const list=loadList(APPS_KEY);list.push({name,url,image,desc});saveList(APPS_KEY,list);renderList(APPS_KEY,'appsGrid','appPlayer');
-      aName.value=aURL.value=aImg.value=aDesc.value='';
-    };
+    // DOM refs
+    const tabHome = document.getElementById('tab-home');
+    const tabGames = document.getElementById('tab-games');
+    const tabApps = document.getElementById('tab-apps');
 
-    // Helpers
-    function loadList(key){try{return JSON.parse(localStorage.getItem(key))||[]}catch{return[]}}
-    function saveList(key,list){localStorage.setItem(key,JSON.stringify(list))}
-    function renderList(key,gridId,playerId){
-      const grid=document.getElementById(gridId);
-      const player=document.getElementById(playerId);
-      const frame=player.querySelector('iframe');
-      const list=loadList(key);
-      grid.innerHTML='';
-      if(!list.length){grid.innerHTML='<div class="muted">No items yet.</div>';return}
-      list.forEach(item=>{
-        const card=document.createElement('div');card.className='item-card card';
-        const img=document.createElement('img');img.src=item.image||'https://via.placeholder.com/800x500?text=Preview';card.appendChild(img);
-        const meta=document.createElement('div');meta.className='meta';
-        const text=document.createElement('div');const title=document.createElement('div');title.className='item-title';title.textContent=item.name;
-        const desc=document.createElement('div');desc.className='item-desc';desc.textContent=item.desc||'';text.appendChild(title);text.appendChild(desc);
-        const actions=document.createElement('div');const playBtn=document.createElement('button');playBtn.className='btn play small';playBtn.textContent='Open Here';playBtn.onclick=()=>{frame.src=item.url;player.style.display='block';player.scrollIntoView({behavior:'smooth'})};
-        const openBtn=document.createElement('a');openBtn.className='btn open small';openBtn.textContent='New Tab';openBtn.href=item.url;openBtn.target='_blank';
-        actions.appendChild(playBtn);actions.appendChild(openBtn);
-        meta.appendChild(text);meta.appendChild(actions);card.appendChild(meta);grid.appendChild(card);
-      })
+    const sectHome = document.getElementById('home');
+    const sectGames = document.getElementById('games');
+    const sectApps = document.getElementById('apps');
+
+    // Home controls
+    const homeEditable = document.getElementById('homeEditable');
+    const saveHomeBtn = document.getElementById('saveHomeBtn');
+    const resetHomeBtn = document.getElementById('resetHomeBtn');
+
+    // Games controls
+    const gName = document.getElementById('gName');
+    const gURL = document.getElementById('gURL');
+    const gImg = document.getElementById('gImg');
+    const gDesc = document.getElementById('gDesc');
+    const addGameBtn = document.getElementById('addGameBtn');
+    const gamesGrid = document.getElementById('gamesGrid');
+    const importGamesBtn = document.getElementById('importGames');
+    const clearGamesBtn = document.getElementById('clearGames');
+
+    const playerWrap = document.getElementById('playerWrap');
+    const playerFrame = document.getElementById('playerFrame');
+    const nowPlayingTitle = document.getElementById('nowPlayingTitle');
+    const openNewTabBtn = document.getElementById('openNewTabBtn');
+    const closePlayer = document.getElementById('closePlayer');
+
+    // Apps controls
+    const aName = document.getElementById('aName');
+    const aURL = document.getElementById('aURL');
+    const aImg = document.getElementById('aImg');
+    const aDesc = document.getElementById('aDesc');
+    const addAppBtn = document.getElementById('addAppBtn');
+    const appsGrid = document.getElementById('appsGrid');
+    const importAppsBtn = document.getElementById('importApps');
+    const clearAppsBtn = document.getElementById('clearApps');
+
+    const appPlayerWrap = document.getElementById('appPlayerWrap');
+    const appPlayerFrame = document.getElementById('appPlayerFrame');
+    const nowAppTitle = document.getElementById('nowAppTitle');
+    const openAppNewTabBtn = document.getElementById('openAppNewTabBtn');
+    const closeAppPlayer = document.getElementById('closeAppPlayer');
+
+    // Utilities: load & save lists with defaults fallback
+    function loadList(key, defaults = []) {
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) return defaults.slice();
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed) || parsed.length === 0) return defaults.slice();
+        return parsed;
+      } catch (e) {
+        return defaults.slice();
+      }
     }
+    function saveList(key, list) {
+      localStorage.setItem(key, JSON.stringify(list));
+    }
+
+    // RENDERERS (generic)
+    function renderGrid(listKey, containerEl, player) {
+      const list = loadList(listKey, listKey === GAMES_KEY ? defaultGames : defaultApps);
+      // persist defaults into localStorage so subsequent edits are stored
+      saveList(listKey, list);
+
+      containerEl.innerHTML = '';
+      if (list.length === 0) {
+        const d = document.createElement('div');
+        d.className = 'muted';
+        d.style.padding = '12px';
+        d.textContent = 'No items yet. Use the form above to add one or click "Load Defaults".';
+        containerEl.appendChild(d);
+        return;
+      }
+
+      list.forEach((item, idx) => {
+        const outer = document.createElement('div');
+        outer.className = 'item-card';
+
+        const cardWrap = document.createElement('div');
+        cardWrap.className = 'card';
+        // image
+        const img = document.createElement('img');
+        img.className = 'card-img';
+        img.src = item.image && item.image.length ? item.image : 'https://via.placeholder.com/1200x700?text=Preview';
+        img.alt = item.name;
+        cardWrap.appendChild(img);
+
+        // meta area
+        const metaWrap = document.createElement('div');
+        metaWrap.className = 'item-meta';
+
+        const textWrap = document.createElement('div');
+        const title = document.createElement('div');
+        title.className = 'item-title';
+        title.textContent = item.name;
+        const desc = document.createElement('div');
+        desc.className = 'item-desc';
+        desc.textContent = item.description || '';
+        textWrap.appendChild(title);
+        textWrap.appendChild(desc);
+
+        const actions = document.createElement('div');
+        actions.style.display = 'flex';
+        actions.style.flexDirection = 'column';
+        actions.style.alignItems = 'flex-end';
+        actions.style.gap = '8px';
+
+        const playBtn = document.createElement('button');
+        playBtn.className = 'btn play small';
+        playBtn.textContent = 'Play';
+        playBtn.onclick = () => {
+          // open player (works for both games and apps)
+          if (player === 'game') {
+            playerFrame.src = item.url;
+            nowPlayingTitle.textContent = item.name;
+            openNewTabBtn.href = item.url;
+            playerWrap.style.display = 'block';
+            playerWrap.scrollIntoView({behavior:'smooth', block:'center'});
+          } else {
+            appPlayerFrame.src = item.url;
+            nowAppTitle.textContent = item.name;
+            openAppNewTabBtn.href = item.url;
+            appPlayerWrap.style.display = 'block';
+            appPlayerWrap.scrollIntoView({behavior:'smooth', block:'center'});
+          }
+        };
+
+        const openBtn = document.createElement('a');
+        openBtn.className = 'btn open small';
+        openBtn.textContent = 'Open Tab';
+        openBtn.href = item.url;
+        openBtn.target = '_blank';
+        openBtn.rel = 'noreferrer';
+
+        const delBtn = document.createElement('button');
+        delBtn.className = 'delete';
+        delBtn.textContent = 'Delete';
+        delBtn.onclick = () => {
+          if (!confirm('Remove this item?')) return;
+          const cur = loadList(listKey, listKey === GAMES_KEY ? defaultGames : defaultApps);
+          cur.splice(idx, 1);
+          saveList(listKey, cur);
+          // hide player if it was this url
+          if (player === 'game' && playerFrame.src === item.url) {
+            closePlayer.click();
+          }
+          if (player === 'app' && appPlayerFrame.src === item.url) {
+            closeAppPlayer.click();
+          }
+          renderGrid(listKey, containerEl, player);
+        };
+
+        actions.appendChild(playBtn);
+        actions.appendChild(openBtn);
+        actions.appendChild(delBtn);
+
+        metaWrap.appendChild(textWrap);
+        metaWrap.appendChild(actions);
+
+        cardWrap.appendChild(metaWrap);
+        outer.appendChild(cardWrap);
+        containerEl.appendChild(outer);
+      });
+    }
+
+    // initial render helpers
+    function renderGames() { renderGrid(GAMES_KEY, gamesGrid, 'game'); }
+    function renderApps() { renderGrid(APPS_KEY, appsGrid, 'app'); }
+
+    // tab handlers
+    function selectTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      tabHome.classList.remove('active'); tabGames.classList.remove('active'); tabApps.classList.remove('active');
+      sectHome.style.display = 'none'; sectGames.style.display = 'none'; sectApps.style.display = 'none';
+
+      if (tab === 'home') { tabHome.classList.add('active'); sectHome.style.display = 'block'; }
+      if (tab === 'games') { tabGames.classList.add('active'); sectGames.style.display = 'block'; renderGames(); }
+      if (tab === 'apps') { tabApps.classList.add('active'); sectApps.style.display = 'block'; renderApps(); }
+    }
+
+    tabHome.onclick = () => selectTab('home');
+    tabGames.onclick = () => selectTab('games');
+    tabApps.onclick = () => selectTab('apps');
+
+    // Add handlers - Games
+    addGameBtn.onclick = () => {
+      const name = gName.value.trim(); const url = gURL.value.trim();
+      if (!name || !url) { alert('Please add name and url'); return; }
+      const img = gImg.value.trim(); const desc = gDesc.value.trim();
+      const list = loadList(GAMES_KEY, defaultGames);
+      list.push({ name, url, description: desc, image: img });
+      saveList(GAMES_KEY, list);
+      gName.value = gURL.value = gImg.value = gDesc.value = '';
+      renderGames();
+    };
+    importGamesBtn.onclick = () => { saveList(GAMES_KEY, defaultGames.slice()); renderGames(); };
+    clearGamesBtn.onclick = () => { if(!confirm('Clear all games?')) return; localStorage.removeItem(GAMES_KEY); renderGames(); closePlayer.click(); };
+
+    // Add handlers - Apps
+    addAppBtn.onclick = () => {
+      const name = aName.value.trim(); const url = aURL.value.trim();
+      if (!name || !url) { alert('Please add name and url'); return; }
+      const img = aImg.value.trim(); const desc = aDesc.value.trim();
+      const list = loadList(APPS_KEY, defaultApps);
+      list.push({ name, url, description: desc, image: img });
+      saveList(APPS_KEY, list);
+      aName.value = aURL.value = aImg.value = aDesc.value = '';
+      renderApps();
+    };
+    importAppsBtn.onclick = () => { saveList(APPS_KEY, defaultApps.slice()); renderApps(); };
+    clearAppsBtn.onclick = () => { if(!confirm('Clear all apps?')) return; localStorage.removeItem(APPS_KEY); renderApps(); closeAppPlayer.click(); };
+
+    // Player close
+    closePlayer.onclick = () => { playerFrame.src = ''; playerWrap.style.display = 'none'; };
+    closeAppPlayer.onclick = () => { appPlayerFrame.src = ''; appPlayerWrap.style.display = 'none'; };
+
+    // Home persistence
+    saveHomeBtn.onclick = () => {
+      localStorage.setItem(HOME_KEY, homeEditable.innerHTML);
+      saveHomeBtn.textContent = 'Saved ✓';
+      setTimeout(()=> saveHomeBtn.textContent = 'Save Home', 1200);
+    };
+    resetHomeBtn.onclick = () => {
+      if (!confirm('Reset home to default?')) return;
+      homeEditable.innerHTML = 'Welcome to your personal Browser Game Hub — edit this message!';
+      localStorage.removeItem(HOME_KEY);
+    };
+    (function loadHome() {
+      const raw = localStorage.getItem(HOME_KEY);
+      if (raw) homeEditable.innerHTML = raw;
+    })();
+
+    // initialize UI
+    (function init(){
+      // Seed lists only if nothing saved (keeps later edits)
+      if (!localStorage.getItem(GAMES_KEY)) {
+        saveList(GAMES_KEY, defaultGames.slice());
+      }
+      if (!localStorage.getItem(APPS_KEY)) {
+        saveList(APPS_KEY, defaultApps.slice());
+      }
+      // show home by default
+      selectTab('home');
+    })();
   </script>
 </body>
 </html>
