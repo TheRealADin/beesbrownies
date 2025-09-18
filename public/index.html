@@ -48,7 +48,7 @@
     /* LISTS */
     .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;margin-top:14px}
     .item-card{background:transparent;border-radius:12px;overflow:hidden}
-    .item-card .card-img{width:100%;height:150px;object-fit:cover;border-radius:8px;background:#111}
+    .card-img{width:100%;height:150px;object-fit:cover;border-radius:8px;background:#111}
     .item-meta{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-top:10px}
     .item-title{font-weight:800;color:#fff;margin:0;font-size:16px}
     .item-desc{color:var(--muted);font-size:13px;margin-top:6px}
@@ -64,6 +64,10 @@
     .form-row input{flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.05);background:transparent;color:#efe8ff}
     .form-row button{padding:8px 12px;border-radius:8px;background:var(--accent1);color:#fff;border:0;cursor:pointer;font-weight:700}
 
+    /* search */
+    .search-row{display:flex;gap:8px;margin-top:12px;align-items:center}
+    .search-row input{flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#efe8ff}
+
     /* player */
     .player{margin-top:18px;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.03)}
     .player .player-header{display:flex;justify-content:space-between;align-items:center;padding:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))}
@@ -74,6 +78,7 @@
     @media (max-width:640px){
       .player iframe{height:420px}
       .form-row{flex-direction:column}
+      .search-row{flex-direction:column}
     }
   </style>
 </head>
@@ -126,6 +131,10 @@
           <button id="addGameBtn">Add Game</button>
         </div>
 
+        <div class="search-row">
+          <input type="text" id="gameSearch" placeholder="Search games by name or description..." />
+        </div>
+
         <div id="gamesGrid" class="grid"></div>
 
         <div id="playerWrap" class="player" style="display:none;margin-top:18px">
@@ -163,6 +172,10 @@
           <button id="addAppBtn">Add App</button>
         </div>
 
+        <div class="search-row">
+          <input type="text" id="appSearch" placeholder="Search apps by name or description..." />
+        </div>
+
         <div id="appsGrid" class="grid"></div>
 
         <div id="appPlayerWrap" class="player" style="display:none;margin-top:18px">
@@ -182,12 +195,12 @@
   </div>
 
   <script>
-    // Keys
+    // storage keys (kept v1 so existing data is preserved)
     const GAMES_KEY = 'hub_games_v1';
     const APPS_KEY = 'hub_apps_v1';
     const HOME_KEY = 'hub_home_v1';
 
-    // DEFAULTS (your provided long list)
+    // long default games list (from your paste)
     const defaultGames = [
       { name: 'Minecraft', url: '/minecraft', description: 'Play Minecraft In Browser!', image: 'https://logo.com/image-cdn/images/kts928pd/production/e1d61cc6d5f05c33c1cd0fbf96c51554671750ba-1140x620.png?w=1920&q=72&fm=webp' },
       { name: 'Classic Minecraft', url: 'https://classic.minecraft.net', description: 'OG Minecraft, In the browser', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSD-KVB2IUG0vYz4i1HVnbC0hSWrT6aBOrIQ&s' },
@@ -206,13 +219,13 @@
       { name: 'Brownie Browser ;D', url: 'https://brownies-browser.vercel.app', description: 'supa fun', image: 'https://marketing.create-cdn.net/assets/browserlogos2021.png' }
     ];
 
-    // small default apps set (you can expand)
+    // small default apps
     const defaultApps = [
       { name: 'Helios Browser', url: 'https://helios-browser.vercel.app', description: 'A browser front-end', image: 'https://via.placeholder.com/1200x700?text=Helios' },
       { name: 'Brownie Browser', url: 'https://brownies-browser.vercel.app', description: 'Brownies browser project', image: 'https://via.placeholder.com/1200x700?text=Brownies' }
     ];
 
-    // DOM refs
+    // DOM references
     const tabHome = document.getElementById('tab-home');
     const tabGames = document.getElementById('tab-games');
     const tabApps = document.getElementById('tab-apps');
@@ -221,12 +234,12 @@
     const sectGames = document.getElementById('games');
     const sectApps = document.getElementById('apps');
 
-    // Home controls
+    // Home
     const homeEditable = document.getElementById('homeEditable');
     const saveHomeBtn = document.getElementById('saveHomeBtn');
     const resetHomeBtn = document.getElementById('resetHomeBtn');
 
-    // Games controls
+    // Games
     const gName = document.getElementById('gName');
     const gURL = document.getElementById('gURL');
     const gImg = document.getElementById('gImg');
@@ -235,14 +248,16 @@
     const gamesGrid = document.getElementById('gamesGrid');
     const importGamesBtn = document.getElementById('importGames');
     const clearGamesBtn = document.getElementById('clearGames');
+    const gameSearch = document.getElementById('gameSearch');
 
+    // Game player
     const playerWrap = document.getElementById('playerWrap');
     const playerFrame = document.getElementById('playerFrame');
     const nowPlayingTitle = document.getElementById('nowPlayingTitle');
     const openNewTabBtn = document.getElementById('openNewTabBtn');
     const closePlayer = document.getElementById('closePlayer');
 
-    // Apps controls
+    // Apps
     const aName = document.getElementById('aName');
     const aURL = document.getElementById('aURL');
     const aImg = document.getElementById('aImg');
@@ -251,14 +266,16 @@
     const appsGrid = document.getElementById('appsGrid');
     const importAppsBtn = document.getElementById('importApps');
     const clearAppsBtn = document.getElementById('clearApps');
+    const appSearch = document.getElementById('appSearch');
 
+    // App player
     const appPlayerWrap = document.getElementById('appPlayerWrap');
     const appPlayerFrame = document.getElementById('appPlayerFrame');
     const nowAppTitle = document.getElementById('nowAppTitle');
     const openAppNewTabBtn = document.getElementById('openAppNewTabBtn');
     const closeAppPlayer = document.getElementById('closeAppPlayer');
 
-    // Utilities: load & save lists with defaults fallback
+    // helper: load/save with defaults fallback
     function loadList(key, defaults = []) {
       try {
         const raw = localStorage.getItem(key);
@@ -274,46 +291,59 @@
       localStorage.setItem(key, JSON.stringify(list));
     }
 
-    // RENDERERS (generic)
-    function renderGrid(listKey, containerEl, player) {
-      const list = loadList(listKey, listKey === GAMES_KEY ? defaultGames : defaultApps);
-      // persist defaults into localStorage so subsequent edits are stored
+    // render grid with optional filter (case-insensitive)
+    function renderGrid(listKey, containerEl, playerType, filter = '') {
+      const defaults = listKey === GAMES_KEY ? defaultGames : defaultApps;
+      const list = loadList(listKey, defaults);
+      // persist defaults into localStorage (so edits persist)
       saveList(listKey, list);
 
+      // create array of {item, originalIndex}
+      const indexed = list.map((it, idx) => ({ it, idx }));
+      const f = String(filter || '').trim().toLowerCase();
+
+      const filtered = indexed.filter(({ it }) => {
+        if (!f) return true;
+        const name = (it.name || '').toString().toLowerCase();
+        const desc = (it.description || '').toString().toLowerCase();
+        return name.includes(f) || desc.includes(f);
+      });
+
       containerEl.innerHTML = '';
-      if (list.length === 0) {
+      if (filtered.length === 0) {
         const d = document.createElement('div');
         d.className = 'muted';
         d.style.padding = '12px';
-        d.textContent = 'No items yet. Use the form above to add one or click "Load Defaults".';
+        d.textContent = 'No items found.';
         containerEl.appendChild(d);
         return;
       }
 
-      list.forEach((item, idx) => {
+      filtered.forEach(({ it, idx }) => {
         const outer = document.createElement('div');
         outer.className = 'item-card';
 
         const cardWrap = document.createElement('div');
         cardWrap.className = 'card';
+
         // image
         const img = document.createElement('img');
         img.className = 'card-img';
-        img.src = item.image && item.image.length ? item.image : 'https://via.placeholder.com/1200x700?text=Preview';
-        img.alt = item.name;
+        img.src = (it.image && it.image.length) ? it.image : 'https://via.placeholder.com/1200x700?text=Preview';
+        img.alt = it.name || 'Preview';
         cardWrap.appendChild(img);
 
-        // meta area
+        // meta
         const metaWrap = document.createElement('div');
         metaWrap.className = 'item-meta';
 
         const textWrap = document.createElement('div');
         const title = document.createElement('div');
         title.className = 'item-title';
-        title.textContent = item.name;
+        title.textContent = it.name || '(unnamed)';
         const desc = document.createElement('div');
         desc.className = 'item-desc';
-        desc.textContent = item.description || '';
+        desc.textContent = it.description || '';
         textWrap.appendChild(title);
         textWrap.appendChild(desc);
 
@@ -323,21 +353,21 @@
         actions.style.alignItems = 'flex-end';
         actions.style.gap = '8px';
 
+        // Play / Open buttons
         const playBtn = document.createElement('button');
         playBtn.className = 'btn play small';
         playBtn.textContent = 'Play';
         playBtn.onclick = () => {
-          // open player (works for both games and apps)
-          if (player === 'game') {
-            playerFrame.src = item.url;
-            nowPlayingTitle.textContent = item.name;
-            openNewTabBtn.href = item.url;
+          if (playerType === 'game') {
+            playerFrame.src = it.url;
+            nowPlayingTitle.textContent = it.name;
+            openNewTabBtn.href = it.url;
             playerWrap.style.display = 'block';
             playerWrap.scrollIntoView({behavior:'smooth', block:'center'});
           } else {
-            appPlayerFrame.src = item.url;
-            nowAppTitle.textContent = item.name;
-            openAppNewTabBtn.href = item.url;
+            appPlayerFrame.src = it.url;
+            nowAppTitle.textContent = it.name;
+            openAppNewTabBtn.href = it.url;
             appPlayerWrap.style.display = 'block';
             appPlayerWrap.scrollIntoView({behavior:'smooth', block:'center'});
           }
@@ -346,7 +376,7 @@
         const openBtn = document.createElement('a');
         openBtn.className = 'btn open small';
         openBtn.textContent = 'Open Tab';
-        openBtn.href = item.url;
+        openBtn.href = it.url;
         openBtn.target = '_blank';
         openBtn.rel = 'noreferrer';
 
@@ -355,17 +385,13 @@
         delBtn.textContent = 'Delete';
         delBtn.onclick = () => {
           if (!confirm('Remove this item?')) return;
-          const cur = loadList(listKey, listKey === GAMES_KEY ? defaultGames : defaultApps);
-          cur.splice(idx, 1);
+          const cur = loadList(listKey, defaults);
+          cur.splice(idx, 1); // idx is original index in cur
           saveList(listKey, cur);
-          // hide player if it was this url
-          if (player === 'game' && playerFrame.src === item.url) {
-            closePlayer.click();
-          }
-          if (player === 'app' && appPlayerFrame.src === item.url) {
-            closeAppPlayer.click();
-          }
-          renderGrid(listKey, containerEl, player);
+          // hide player if URL matches
+          if (playerType === 'game' && playerFrame.src === it.url) closePlayer.click();
+          if (playerType === 'app' && appPlayerFrame.src === it.url) closeAppPlayer.click();
+          renderGrid(listKey, containerEl, playerType, (playerType==='game' ? gameSearch.value : appSearch.value));
         };
 
         actions.appendChild(playBtn);
@@ -381,26 +407,25 @@
       });
     }
 
-    // initial render helpers
-    function renderGames() { renderGrid(GAMES_KEY, gamesGrid, 'game'); }
-    function renderApps() { renderGrid(APPS_KEY, appsGrid, 'app'); }
+    // specific renderers
+    function renderGames(filter = '') { renderGrid(GAMES_KEY, gamesGrid, 'game', filter); }
+    function renderApps(filter = '') { renderGrid(APPS_KEY, appsGrid, 'app', filter); }
 
-    // tab handlers
+    // tab select
     function selectTab(tab) {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      tabHome.classList.remove('active'); tabGames.classList.remove('active'); tabApps.classList.remove('active');
       sectHome.style.display = 'none'; sectGames.style.display = 'none'; sectApps.style.display = 'none';
 
       if (tab === 'home') { tabHome.classList.add('active'); sectHome.style.display = 'block'; }
-      if (tab === 'games') { tabGames.classList.add('active'); sectGames.style.display = 'block'; renderGames(); }
-      if (tab === 'apps') { tabApps.classList.add('active'); sectApps.style.display = 'block'; renderApps(); }
+      if (tab === 'games') { tabGames.classList.add('active'); sectGames.style.display = 'block'; renderGames(gameSearch.value || ''); }
+      if (tab === 'apps') { tabApps.classList.add('active'); sectApps.style.display = 'block'; renderApps(appSearch.value || ''); }
     }
 
     tabHome.onclick = () => selectTab('home');
     tabGames.onclick = () => selectTab('games');
     tabApps.onclick = () => selectTab('apps');
 
-    // Add handlers - Games
+    // Add game
     addGameBtn.onclick = () => {
       const name = gName.value.trim(); const url = gURL.value.trim();
       if (!name || !url) { alert('Please add name and url'); return; }
@@ -414,7 +439,7 @@
     importGamesBtn.onclick = () => { saveList(GAMES_KEY, defaultGames.slice()); renderGames(); };
     clearGamesBtn.onclick = () => { if(!confirm('Clear all games?')) return; localStorage.removeItem(GAMES_KEY); renderGames(); closePlayer.click(); };
 
-    // Add handlers - Apps
+    // Add app
     addAppBtn.onclick = () => {
       const name = aName.value.trim(); const url = aURL.value.trim();
       if (!name || !url) { alert('Please add name and url'); return; }
@@ -428,11 +453,11 @@
     importAppsBtn.onclick = () => { saveList(APPS_KEY, defaultApps.slice()); renderApps(); };
     clearAppsBtn.onclick = () => { if(!confirm('Clear all apps?')) return; localStorage.removeItem(APPS_KEY); renderApps(); closeAppPlayer.click(); };
 
-    // Player close
+    // player close
     closePlayer.onclick = () => { playerFrame.src = ''; playerWrap.style.display = 'none'; };
     closeAppPlayer.onclick = () => { appPlayerFrame.src = ''; appPlayerWrap.style.display = 'none'; };
 
-    // Home persistence
+    // home persistence
     saveHomeBtn.onclick = () => {
       localStorage.setItem(HOME_KEY, homeEditable.innerHTML);
       saveHomeBtn.textContent = 'Saved ✓';
@@ -448,16 +473,14 @@
       if (raw) homeEditable.innerHTML = raw;
     })();
 
-    // initialize UI
+    // search handlers (re-render on input)
+    gameSearch.addEventListener('input', (e) => renderGames(e.target.value));
+    appSearch.addEventListener('input', (e) => renderApps(e.target.value));
+
+    // Initialize (seed defaults if not present)
     (function init(){
-      // Seed lists only if nothing saved (keeps later edits)
-      if (!localStorage.getItem(GAMES_KEY)) {
-        saveList(GAMES_KEY, defaultGames.slice());
-      }
-      if (!localStorage.getItem(APPS_KEY)) {
-        saveList(APPS_KEY, defaultApps.slice());
-      }
-      // show home by default
+      if (!localStorage.getItem(GAMES_KEY)) saveList(GAMES_KEY, defaultGames.slice());
+      if (!localStorage.getItem(APPS_KEY)) saveList(APPS_KEY, defaultApps.slice());
       selectTab('home');
     })();
   </script>
